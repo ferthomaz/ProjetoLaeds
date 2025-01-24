@@ -1,2 +1,2 @@
 # ProjetoLaeds
-Projeto de busca de padrão e analise de pista 
+Projeto em C de busca de padrão e análise de pista  
