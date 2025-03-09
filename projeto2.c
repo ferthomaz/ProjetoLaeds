@@ -5,11 +5,11 @@
 
 /****
 
-LAED1 - Projeto (Parte II) - Estimativa do formato da pista
+LAED1 - Projeto - Estimativa do formato da pista
 
 Alunos(as): Mariana Matias do Nacimento e Fernanda Moreira Thomaz 
 
-Data: 15/01/2025
+Data: 27/01/2025
 
 ****/
 
@@ -86,6 +86,27 @@ Data: 15/01/2025
 
 }
 
+void impedimentoNaPista(TipoLista Lista){
+
+    TipoApontador aux = Lista.Primeiro->Prox;
+
+    //caso tenha alguma coisa diferente do segmento do meio, ele retorna que tem impedimento
+    while (aux != NULL && aux->Prox != NULL) {
+        if (aux->Item.Tipo == 1 &&
+            aux->Prox != NULL && aux->Prox->Item.Tipo == 3 &&
+            aux->Prox->Prox != NULL && aux->Prox->Prox->Item.Tipo == 2 &&
+            aux->Prox->Prox->Prox != NULL && aux->Prox->Prox->Prox->Item.Tipo != 2 &&
+            aux->Prox->Prox->Prox->Prox != NULL && aux->Prox->Prox->Prox->Prox->Item.Tipo == 2 ) {
+            printf("Resultado: Pista com impedimento.\n");
+            return;
+            
+        }
+        aux = aux->Prox;
+    }
+
+    printf("Resultado: Pista sem impedimento.\n");
+}
+
  void encontraPadrao(TipoLista Lista, int tamanho, int L) {
     TipoApontador aux = Lista.Primeiro->Prox;
     int contadora = 0;
@@ -100,10 +121,9 @@ Data: 15/01/2025
             aux->Prox->Prox != NULL && aux->Prox->Prox->Item.Tipo == 2 &&
             aux->Prox->Prox->Prox != NULL && aux->Prox->Prox->Prox->Item.Tipo == 3 &&
             aux->Prox->Prox->Prox->Prox != NULL && aux->Prox->Prox->Prox->Prox->Item.Tipo == 1) {
-            //printf("Resultado: Padrao encontrado.\n");
             contadora++;
             
-            if(aux->Prox->Prox->Item.Tipo == 2){ //pq se achar padrao o aux sempre vai ser 1, entao tem que pegar o prox prox
+            if(aux->Prox->Prox->Item.Tipo == 2){ //pois se achar padrao o aux sempre vai ser 1, entao tem que pegar o prox prox
               pontosMedios[i] = aux->Prox->Prox->Item.PontoMedio;  //coloca os pontos medios das linhas que possuem padrao em um vetor
               i++;
             }
@@ -112,8 +132,8 @@ Data: 15/01/2025
         aux = aux->Prox;
     }
     
-    //printf("Resultado: Padrao nao encontrado.\n");
-    if(contadora >= L*0.7){     //se n for 0,7 nao da pra estimar
+    
+    if(contadora >= L*0.7){     //se n for 0,7 nao da pra estimar, pois os dados so sao validos acima de 70 por cento
       estimaFormato(pontosMedios, i);
     }else{
       printf("Resultado: Formato da pista nao estimado.\n");
@@ -128,12 +148,11 @@ Data: 15/01/2025
 int main(){
   TipoLista lista;
   TipoItem item;
-  //int vetor[MAX];
   TipoApontador p;
   FLVazia(&lista);
   
 
-int L; //quantidade de conjunos de 950
+int L; //quantidade de conjuntos na entrada formados por 950 numeros
 scanf("%d", &L);
 
 
@@ -144,7 +163,7 @@ int j = 0;
 for(int i = 0; i<L; i++){
   
   scanf("%d", &n);
-
+// o elemento 5 é colocado para separar os grupo de 950 numeros
   for(int k = 0; k<n; k++){
     scanf("%d", &vet[j]);
     j++;
@@ -239,9 +258,12 @@ for(int i = 0; i<tam-1; i++){
   TipoItem *novoItem = cria_item(i, tipo[i], quantidade[i], pontoMedio[i]);  
   Insere(*novoItem, &lista);
 }
+    
+//para verificar o padrao
+//encontraPadrao(lista, tam, L);
 
-encontraPadrao(lista, tam, L);
-
+//para verificar impedimento na pista
+impedimentoNaPista(lista);
 
 return 0;
 }
