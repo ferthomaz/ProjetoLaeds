@@ -43,6 +43,6 @@ gcc main.c -o projeto -lm
 📧 Email Mariana: [mmatias0310@gmail.com](mailto\:mmatias0310@gmail.com)\
 📧 Email Fernanda: [fermtthomaz@gmail.com](mailto\:fermtthomaz@gmail.com)\
 🔗 LinkedIn Mariana: [Mariana Nascimento](https://www.linkedin.com/in/mariana-matias-nascimento/)
-🔗 LinkedIn Fernanda: [Seu Nome](https://www.linkedin.com/in/fernanda-mthomaz/)
+🔗 LinkedIn Fernanda: [Fernanda Moreira Thomaz](https://www.linkedin.com/in/fernanda-mthomaz/)
 
 
