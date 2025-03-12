@@ -1,0 +1,107 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{setspace} % Ajustar espaçamento entre linhas
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=2cm]{geometry} % Margens ABNT
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor} % Para cores personalizadas (opcional)
+
+% Configuração para exibir código Verilog
+\lstdefinelanguage{Verilog}{
+    morekeywords=[1]{module, input, output, reg, always, case, endcase, begin, end, wire, assign}, % Palavras-chave principais
+    morecomment=[l]{//}, % Comentários de uma linha
+    morecomment=[s]{/*}{*/}, % Comentários de múltiplas linhas
+    morestring=[b]", % Strings entre aspas duplas
+    sensitive=true % Case-sensitive
+}
+\lstset{
+    language=Verilog, % Define a linguagem como Verilog
+    basicstyle=\ttfamily\footnotesize, % Fonte monoespaçada e tamanho pequeno
+    keywordstyle=\color{blue}\bfseries, % Palavras-chave em azul e negrito
+    commentstyle=\color{green!50!black}, % Comentários em verde
+    stringstyle=\color{red}, % Strings em vermelho
+    numbers=left, % Números de linha à esquerda
+    numberstyle=\tiny, % Números de linha em tamanho pequeno
+    stepnumber=1, % Mostrar números de linha em cada linha
+    breaklines=true, % Quebra automática de linhas
+    frame=single, % Adicionar uma borda ao redor do código
+    captionpos=b, % Posição da legenda (abaixo do código)
+    tabsize=4, % Tamanho do tab
+    showspaces=false, % Não mostrar espaços
+    showstringspaces=false, % Não mostrar espaços em strings
+}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float} % para colocar o H
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+
+\begin{document}
+
+% Início do conteúdo do relatório
+\setcounter{page}{1} % Numeração da página começa aqui
+\section{Introdução}
+Na disciplina de Laboratório de Algoritmos e Estrutura de Dados, realizamos um projeto dividido em quatro partes, sendo a última delas este relatório. Na primeira parte, foi solicitada a criação de uma lista, utilizando a implementação do Ziviane, para encontrar o padrão da pista: \("1 3 2 3 1"\). Já na segunda parte, era necessário verificar se pelo menos \(70\%\) da pista apresentava esse padrão e, com base nisso, analisar os pontos médios da cor vermelha para determinar se o trajeto consistia em uma curva à direita, à esquerda ou em uma linha reta. Por fim, para terceira parte foi preciso implementar uma lógica para verificar a presença de obstáculos na pista, permitindo distinguir entre percursos com ou sem impedimentos.
+
+Para a implementação da lógica da primeira etapa, baseamo-nos no código desenvolvido anteriormente na disciplina para o projeto de "Análise de Segmentos". Assim, utilizamos as funções para criar um vetor sem repetição, calcular a quantidade de itens em cada segmento e determinar o ponto médio. Com isso, a primeira tarefa consistiu em criar a lista e adicionar cada segmento como um item. Em seguida, chamamos a função responsável por encontrar padrão, percorrendo toda a lista e exibindo na tela quando uma correspondência era encontrada. 
+
+Na segunda etapa, a função de encontrar padrão foi aprimorada para verificar a porcentagem da pista que segue o padrão especificado. Com base nesse resultado, a função que analisa o formato da pista foi acionada ou não. Essa função realiza cálculos a partir da diferença entre o primeiro e o último ponto médio do segmento vermelho.
+
+Por fim, na terceira e última etapa do código do projeto,criamos uma nova função para detectar variações dentro do padrão, permitindo a identificação de possíveis obstáculos na pista.
+
+\newpage
+\section{Desenvolvimento e Implementação}
+Para a implementação da primeira parte, como mencionado, foi necessário criar cada item antes de adicioná-los à lista. Cada um foi estruturado a partir da struct com os seguintes campos:
+
+\lstset{
+    language=C,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    frame=single,
+    tabsize=4
+}
+
+\begin{lstlisting}
+// Definicao da estrutura TipoItem
+typedef struct item {
+    int Chave;
+    int Tipo;
+    int NumElementos;
+    int PontoMedio;
+} TipoItem;
+\end{lstlisting}
+
+Após o usuário inserir os valores, armazenamos todos em um único vetor. Utilizando o código de análise de segmentos citado anteriormente, realizamos os cálculos necessários para preencher os campos da struct. Em seguida, chamamos a função cria item, baseada nas funções de lista do Ziviani apresentadas pela professora, para instanciar os elementos da lista. A função insere foi utilizada para adicionar os segmentos à lista. Por fim, chamamos a função responsável por encontrar o padrão "1 3 2 3 1". Essa função percorre toda a lista utilizando um ponteiro e verifica o campo Tipo de cada elemento. Quando encontra o padrão, exibe na tela "Padrão encontrado!". Caso o padrão não seja identificado após percorrer todos os itens, a mensagem "Padrão não encontrado!" é exibida, e o programa é finalizado.
+
+Na segunda parte, ajustamos a lógica de cálculo do ponto médio que já estava presente na primeira parte, mas não funcionava corretamente. Para corrigir esse problema, adicionamos separadores de linha (representados pelo número 5) após o padrão de entrada de 950 números. Dessa forma, o cálculo do ponto médio de cada segmento é reiniciado sempre que a variável de iteração do for atinge um separador, garantindo que a posição da linha dos segmentos seja levada em consideração.
+
+Para o restante da lógica, a função de detecção de padrão foi moificada para incrementar uma contadora a cada ocorrência do padrão, em vez de retornar imediatamente ao main após a primeira correspondência. Além disso, armazenamos em um vetor todos os pontos médios dos segmentos vermelhos (tipo 2) que pertencem a blocos de segmentos que seguem o padrão. Se pelo menos \(70\%\)  das linhas contiverem o padrão, chamamos a função estimar formato, caso contrário, exibimos a mensagem "Formato de pista não estimado!".Na lógica para estimar o formato da pista, calculamos a diferença entre o primeiro e o último ponto médio registrado (considerando que os segmentos são processados do topo da imagem para o final). Se essa diferença for maior que 50, classificamos o trajeto como uma curva à direita; se for menor que 50, como uma curva à esquerda, caso contrário, a pista é considerada uma linha reta.
+
+Por fim, para a função que verifica a presença de impedimentos na pista, utilizamos uma lógica semelhante à da detecção de padrão. No entanto, em vez de buscar a sequência "1 3 2 3 1", procuramos a sequência "1 3 2 \textbf{?} 2 3 1", onde o ? representa um possível obstáculo dentro da pista. Como o impedimento deve ocorrer exclusivamente dentro do segmento vermelho (Tipo 2), verificamos se há algum outro tipo de segmento nessa posição. Se houver, concluímos que há um impedimento; caso contrário, não há.
+
+\newpage
+\section{Conclusão}
+No projeto, nosso objetivo era realizar o reconhecimento de uma pista, identificar seu formato e detectar possíveis obstáculos. Felizmente, conseguimos cumprir essa meta, mas enfrentamos alguns desafios ao longo do desenvolvimento.
+
+O primeiro desafio foi a adaptação ao código de outro desenvolvedor. Como solicitado pela professora, utilizamos a estrutura de lista com apontadores do Ziviani. Trabalhar com um código que não foi escrito por nós exigiu um entendimento profundo do seu funcionamento para que pudéssemos implementar funções de forma clara e objetiva, evitando redundâncias.
+
+Outro desafio foi lidar com entradas de grande volume de dados. Manipular essas entradas não é uma tarefa simples, mas conseguimos contornar essa dificuldade e desenvolver um código eficiente para processá-las adequadamente.
+
+Na etapa de testes, devido ao grande volume de dados, não foi possível realizar um número muito alto de testes. No entanto, isso acabou sendo um aspecto positivo, pois nos levou a focar ainda mais no desenvolvimento, minimizando erros desde o início e realizando um processo cuidadoso de depuração antes mesmo da compilação.
+
+De modo geral, aprendemos bastante ao longo do projeto e conseguimos aplicar na prática os conhecimentos adquiridos em sala de aula.
+
+
+\section{Referências}
+
+ZIVIANI, Nívio. Projetos de algoritmos. 2. ed. São Paulo: Cengage Learning, 2010.
+
+\end{document}
